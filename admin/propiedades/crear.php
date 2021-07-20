@@ -145,7 +145,7 @@ includeTemplate('header');
 
 <main class="contenedor seccion">
     <h1>Crear</h1>
-    <a href="/admin" class="boton boton-verde">Volver</a>
+    <a href="/BienesRaices/admin" class="boton boton-verde">Volver</a>
 
     <?php foreach ($errores as $error) : ?>
 
