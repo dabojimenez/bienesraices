@@ -26,10 +26,10 @@
                 <div class="derecha">
                     <img src="/BienesRaices/build/img/dark-mode.svg" class="dark-mode-boton">
                     <nav class="navegacion">
-                        <a href="nosotros.php">Nosotros</a>
-                        <a href="anuncios.php">Anuncios</a>
-                        <a href="blog.php">Blog</a>
-                        <a href="contacto.php">Contacto</a>
+                        <a href="/BienesRaices/nosotros.php">Nosotros</a>
+                        <a href="/BienesRaices/anuncios.php">Anuncios</a>
+                        <a href="/BienesRaices/blog.php">Blog</a>
+                        <a href="/BienesRaices/contacto.php">Contacto</a>
                     </nav>
                 </div>
             </div>
