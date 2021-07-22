@@ -1,4 +1,11 @@
 <?php
+require '../../includes/funciones.php';
+$autenticacion = estaAutenticado();
+if (!$autenticacion) {
+    header('Location: /BienesRaices/');
+}
+
+
 //BASE DE DATOS
 require '../../includes/config/database.php';
 $db = coneccionBD();
@@ -136,8 +143,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
-
-require '../../includes/funciones.php';
 
 includeTemplate('header');
 

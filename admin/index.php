@@ -1,4 +1,20 @@
 <?php
+// //  Colocamos el (session_start), para iniciar la sesion
+// session_start();
+// //  Comprovamos que parametros nos trae la super global
+// // echo "<pre>";
+// // var_dump($_SESSION);
+// // echo "</pre>";
+// $autenticacion = $_SESSION['login'];
+// if (!$autenticacion) {
+//     header('Location: /BienesRaices/');
+// }
+require '../includes/funciones.php';
+$autenticacion = estaAutenticado();
+if (!$autenticacion) {
+    header('Location: /BienesRaices/');
+}
+
 
 //  Importar la conexion
 require '../includes/config/database.php';
@@ -14,7 +30,6 @@ $resultadoConsulta = mysqli_query($db, $query);
 //  Muestra mensjae condicional
 // Con (??), podemos asignar a la URL un valor null
 $resultado = $_GET['resultado'] ?? null;
-require '../includes/funciones.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //  Obtenemos el valor de nuestra variable

@@ -38,11 +38,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //  para esto usmaos (password_verify), le pasamos el password en string y el segundo es el password hasheado
             $autenticacion = password_verify($password, $usuario['password']);
             if ($autenticacion) {
-                # code...
+                #   El usuario esta autenticado
+                //  Aremos uso de (session_start), para iniciar la session y asi poder acceder a ($_SESSION)
+                session_start();
+
+                //  Llenar el arreglo de la sesión
+                $_SESSION['usuario'] = $usuario['email'];
+                $_SESSION['login'] = true;
+                // echo "<pre>";
+                // var_dump($_SESSION);
+                // echo "</pre>";
+
+                header('Location: /BienesRaices/admin');
             }else{
                 $errores[] = "El password es incorrecto";
             }
-            var_dump($autenticacion);
+            //var_dump($autenticacion);
         }else{
             $errores[] = "El usuario no existe";
         }

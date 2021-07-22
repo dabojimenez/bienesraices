@@ -1,4 +1,9 @@
 <?php
+require '../../includes/funciones.php';
+$autenticacion = estaAutenticado();
+if (!$autenticacion) {
+    header('Location: /BienesRaices/');
+}
 
 //  Validamos que sea un id valido
 $id = $_GET['id'];
@@ -141,8 +146,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
-
-require '../../includes/funciones.php';
 
 includeTemplate('header');
 
