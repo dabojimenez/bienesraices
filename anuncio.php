@@ -1,6 +1,6 @@
 <?php
 
-require 'includes/funciones.php';
+require 'includes/app.php';
 includeTemplate('header');
 //  OBtener valor de la URL mediante GET
 $id = $_GET['id'];
@@ -11,7 +11,7 @@ if (!$id) {
 }
 
 //  Importamos la conexion
-require 'includes/config/database.php';
+// require 'includes/config/database.php';
 $db = coneccionBD();
 
 //  Consulta a BD

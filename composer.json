@@ -1,0 +1,16 @@
+{
+    "name": "davidcasa/bienes-raices",
+    "description": "Creando un Proyecto web con POO en Udemy",
+    "authors": [
+        {
+            "name": "dabojimenez",
+            "email": "dabojimenez16@hotmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\" : "./clases"
+        }
+    }
+}

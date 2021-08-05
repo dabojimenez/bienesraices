@@ -1,6 +1,8 @@
 <?php
+require 'includes/app.php';
+
 //  IMportar conexion
-require ('includes/config/database.php');
+// require ('includes/config/database.php');
 $db = coneccionBD();
 
 
@@ -62,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 //  Incluye el header
-require 'includes/funciones.php';
+
 includeTemplate('header');
 
 ?>
