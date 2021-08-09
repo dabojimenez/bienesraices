@@ -9,22 +9,23 @@
 // if (!$autenticacion) {
 //     header('Location: /BienesRaices/');
 // }
-require '../includes/funciones.php';
-$autenticacion = estaAutenticado();
-if (!$autenticacion) {
-    header('Location: /BienesRaices/');
-}
+require '../includes/app.php';
+// $autenticacion = estaAutenticado();
+estaAutenticado();
+// if (!$autenticacion) {
+//     //header('Location: /BienesRaices/');
+// }
 
 
-//  Importar la conexion
-require '../includes/config/database.php';
-$db = coneccionBD();
+// //  Importar la conexion
+// require '../includes/config/database.php';
+// $db = coneccionBD();
 
-//  Escribimos el QUery
-$query = "SELECT * FROM propiedades";
+// //  Escribimos el QUery
+// $query = "SELECT * FROM propiedades";
 
-//  Consultar la base de datos
-$resultadoConsulta = mysqli_query($db, $query);
+// //  Consultar la base de datos
+// $resultadoConsulta = mysqli_query($db, $query);
 
 
 //  Muestra mensjae condicional

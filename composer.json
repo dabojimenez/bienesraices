@@ -7,7 +7,9 @@
             "email": "dabojimenez16@hotmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "intervention/image": "^2.6"
+    },
     "autoload": {
         "psr-4": {
             "App\\" : "./clases"
