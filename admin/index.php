@@ -1,61 +1,33 @@
 <?php
-// //  Colocamos el (session_start), para iniciar la sesion
-// session_start();
-// //  Comprovamos que parametros nos trae la super global
-// // echo "<pre>";
-// // var_dump($_SESSION);
-// // echo "</pre>";
-// $autenticacion = $_SESSION['login'];
-// if (!$autenticacion) {
-//     header('Location: /BienesRaices/');
-// }
+
 require '../includes/app.php';
-// $autenticacion = estaAutenticado();
 estaAutenticado();
-// if (!$autenticacion) {
-//     //header('Location: /BienesRaices/');
-// }
+// IMportar las clases
+use App\Propiedad;
+use App\Vendedor;
 
+// Implementar un metodo para obtener todas las propeidades
+$propiedades = Propiedad::all();
+$vendedores = Vendedor::all();
 
-// //  Importar la conexion
-// require '../includes/config/database.php';
-// $db = coneccionBD();
-
-// //  Escribimos el QUery
-// $query = "SELECT * FROM propiedades";
-
-// //  Consultar la base de datos
-// $resultadoConsulta = mysqli_query($db, $query);
-
-
-//  Muestra mensjae condicional
-// Con (??), podemos asignar a la URL un valor null
 $resultado = $_GET['resultado'] ?? null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //  Obtenemos el valor de nuestra variable
+    //  Obtenemos el valor de nuestra variable, para validar el id
     $id = $_POST['id'];
     $id = filter_var($id, FILTER_VALIDATE_INT);
 
     if ($id) {
-        //  Eliminar el archivo
-        $queryImagen = "SELECT imagen FROM propiedades WHERE id = ${id}";
-        $resultado = mysqli_query($db, $queryImagen);
-        $propiedadImagen = mysqli_fetch_assoc($resultado);
-        //  ELiminamos el archivo con (unlink)
-        $test = unlink('../imagenes/' . $propiedadImagen['imagen']);
-        // if ( $test ) {
-        //     echo 'elimino la imagen';
-        // }else{
-        //     echo 'no se eliminamo la imagen';
-        // }
-
-        //  ELiminar la Propiedad
-        $query = "DELETE FROM propiedades WHERE id = ${id}";
-
-        $resultado = mysqli_query($db, $query);
-        if ($resultado) {
-            header('Location:/BienesRaices/admin?resultado=3');
+        $tipo = $_POST['tipo'];
+        if (validarTipoContenido($tipo)) {
+            // Compara lo que vamos a eliminar
+            if ($tipo === 'vendedor') {
+                $vendedor = Vendedor::find($id);
+                $vendedor->eliminar();
+            } else if ($tipo === 'propiedad') {
+                $propiedad = Propiedad::find($id);
+                $propiedad->eliminar();
+            }
         }
     }
 }
@@ -67,20 +39,21 @@ includeTemplate('header');
 
 <main class="contenedor seccion">
     <h1>Administradro de Bienes Raicess</h1>
-    <?php if (intval($resultado) === 1) :  ?>
-        <p class="alerta exito">Anuncio Creado Correctamente</p>
-    <?php elseif (intval($resultado) === 2) : ?>
-        <p class="alerta exito">Anuncio Actualizado Correctamente</p>
-    <?php elseif (intval($resultado) === 3) : ?>
-        <p class="alerta exito">Anuncio Eliminado Correctamente</p>
-    <?php endif; ?>
+    <?php
+        $mensaje = mostrarNotificacion( intval($resultado) );
+        if ($mensaje) { ?>
+            <p class="alerta exito"> <?php echo sanitizar($mensaje); ?> </p>
+        <?php } ?>
     <a href="propiedades/crear.php" class="boton boton-verde">Nueva Propiedad</a>
+    <a href="vendedores/crear.php" class="boton boton-amarillo">Nueva Vendedor</a>
+
+    <h2>Propiedades</h2>
 
     <table class="propiedades">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Tutulo</th>
+                <th>Título</th>
                 <th>Imagen</th>
                 <th>Precio</th>
                 <th>Acciones</th>
@@ -89,30 +62,63 @@ includeTemplate('header');
 
         <tbody>
             <!-- Mostrar los resultados -->
-            <?php while ($propiedad = mysqli_fetch_assoc($resultadoConsulta)) :  ?>
+            <?php foreach ($propiedades as $propiedad) :  ?>
                 <tr>
-                    <td><?php echo $propiedad['id']; ?></td>
-                    <td><?php echo $propiedad['titulo']; ?></td>
-                    <td> <img src="/BienesRaices/imagenes/<?php echo $propiedad['imagen']; ?>" class="imagen-tabla"></td>
-                    <td>$ <?php echo $propiedad['precio']; ?></td>
+                    <td><?php echo $propiedad->id; ?></td>
+                    <td><?php echo $propiedad->titulo; ?></td>
+                    <td> <img src="/BienesRaices/imagenes/<?php echo $propiedad->imagen; ?>" class="imagen-tabla"></td>
+                    <td>$ <?php echo $propiedad->precio; ?></td>
                     <td>
                         <form method="POST" class="w-100">
                             <!-- el type (hidden), quiere decir que esta oculto, y en este caso ocultaremos el ID -->
-                            <input type="hidden" name="id" value="<?php echo $propiedad['id']; ?>">
+                            <input type="hidden" name="id" value="<?php echo $propiedad->id; ?>">
+                            <input type="hidden" name="tipo" value="propiedad">
                             <input type="submit" value="Eliminar" class="boton-rojo-block">
                         </form>
 
-                        <a href="propiedades/actualizar.php?id=<?php echo $propiedad['id']; ?>" class="boton-amarillo-block">Actualizar</a>
+                        <a href="propiedades/actualizar.php?id=<?php echo $propiedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
                     </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <h2>Vendedores</h2>
+
+    <table class="propiedades">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <!-- Mostrar los resultados -->
+            <?php foreach ($vendedores as $vendedor) :  ?>
+                <tr>
+                    <td><?php echo $vendedor->id; ?></td>
+                    <td><?php echo $vendedor->nombre . " " . $vendedor->apellido; ?></td>
+                    <td><?php echo $vendedor->telefono; ?></td>
+                    <td>
+                        <form method="POST" class="w-100">
+                            <!-- el type (hidden), quiere decir que esta oculto, y en este caso ocultaremos el ID -->
+                            <input type="hidden" name="id" value="<?php echo $vendedor->id; ?>">
+                            <input type="hidden" name="tipo" value="vendedor">
+                            <input type="submit" value="Eliminar" class="boton-rojo-block">
+                        </form>
+
+                        <a href="vendedores/actualizar.php?id=<?php echo $vendedor->id; ?>" class="boton-amarillo-block">Actualizar</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 
 </main>
 
 <?php
-//  Cerramos la conexion de la base de datos
-mysqli_close($db);
 
 includeTemplate('footer'); ?>

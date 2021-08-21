@@ -28,3 +28,40 @@ function debugear($variable)
     echo '</pre>';
     exit;
 }
+// Escapa   -   Sanitizar el HTML
+function sanitizar($html) : string{
+    // Sanitizamos ocn la funcion (htmlspecialchars)
+    $sanitizado = htmlspecialchars($html);
+    return $sanitizado;
+}
+
+// Validar tipo de contenido
+function validarTipoContenido($tipo){
+    $tipos = ['vendedor','propiedad'];
+    /**Con (in_array()), lo que hacemos e sbuscar un array dentro de un string, toma dos parametros:
+     * 1)   LO que vamos a buscar dentro del arreglo
+     * 2)   El arreglo sobre el cual vamos a buscar
+     * */
+    return in_array($tipo,$tipos);
+}
+
+// Muestra los mensajes
+function mostrarNotificacion ($codigo){
+    $mensaje = '';
+
+    switch ($codigo) {
+        case 1:
+            $mensaje = 'Creado Correctamente';
+            break;
+        case 2:
+            $mensaje = 'Actualizado Correctamente';
+            break;
+        case 3:
+            $mensaje = 'Eliminado Correctamente';
+            break;
+        default:
+            $mensaje = false;
+            break;
+    }
+    return $mensaje;
+}
