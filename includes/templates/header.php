@@ -23,7 +23,7 @@ $autenticacion = $_SESSION['login'] ?? false ;
     <header class="header <?php echo $inicio ? 'inicio' : ''; ?>">
         <div class="contenedor contenido-header">
             <div class="barra">
-                <a href="/BienesRaices/admin/">
+                <a href="/BienesRaices/">
                     <img src="/BienesRaices/build/img/logo.svg" alt="Logotipo de Bienes Raices">
                 </a>
 
